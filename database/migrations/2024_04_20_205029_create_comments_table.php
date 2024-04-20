@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('post_id')->constrained('posts');
+            $table->bigInteger('parent_id')->unsigned()->nullable();
+            $table->text('comment');
+            $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
+
+            // Add the foreign key constraint
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on('comments')
+                ->onDelete('cascade');
         });
     }
 
